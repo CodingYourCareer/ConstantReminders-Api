@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.699.0"
+  }
+}
