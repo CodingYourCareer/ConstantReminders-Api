@@ -13,8 +13,9 @@ using var log = new LoggerConfiguration().MinimumLevel.Verbose()
 log.Verbose("Preparing for development...");
 log.Information("Hi there! How are you ?");
 
+//app.MapGet("/hello", () => "Hello World!");
 
 app.MapGet("/health", () => new {status = "healthy"});
 
 app.Run();
-public partial class Program { }
+public partial class AppProgram { }
