@@ -1,40 +1,51 @@
 name: Build Pipeline
+
 on:
   push:
-    branches:
-      - main  
+    branches: [main]
   pull_request:
-    branches:
-      - main 
-jobs:
-  build-and-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    branches: [main]
 
-      - name: Set up .NET
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on:
+      windows-latest # For a list of available runner types, refer to
+      # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Install the .NET Core workload
+      - name: Install .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0'
+          dotnet-version: 9
 
-      - name: Restore dependencies
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Restore dependencies as well as project-specific tools
         run: dotnet restore
 
-      - name: Install Snyk CLI
-        run: npm install -g snyk
-
-      - name: Authenticate Snyk
+      - name: Install & configure Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk auth $SNYK_TOKEN
+        run: |
+          curl "https://static.snyk.io/cli/latest/snyk-win.exe" -o snyk.exe
+          .\snyk auth "$SNYK_TOKEN"
 
-      - name: Run Snyk Test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --file=ConstantReminderApi.sln --severity-threshold=high
+      - name: Run Snyk Open Source (SCA)
+        run: |
+          .\snyk.exe test
 
-      - name: Monitor Project in Snyk
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk monitor --file=ConstantReminderApi.sln
+      - name: Create Snyk Open Source (SCA) snapshot
+        run: |
+          .\snyk.exe monitor
