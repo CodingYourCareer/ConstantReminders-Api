@@ -10,9 +10,9 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Debug]
-
-    runs-on: ubuntu-latest
+        configuration: [Debug, Release]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -29,6 +29,12 @@ jobs:
       - name: Restore dependencies as well as project-specific tools
         run: dotnet restore
 
+      - name: Build
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
       - name: Install Snyk
         run: |
           sudo npm install -g snyk
@@ -39,7 +45,7 @@ jobs:
         run: snyk auth $SNYK_TOKEN
 
       - name: Run Snyk Open Source (SCA)
-        run: snyk test
+        run: snyk test --file=ConstantReminders-Api/ConstantReminderApi.csproj --package-manager=nuget
 
       - name: Create Snyk Open Source (SCA) snapshot
-        run: snyk monitor
+        run: snyk monitor --file=ConstantReminders-Api/ConstantReminderApi.csproj --package-manager=nuget
