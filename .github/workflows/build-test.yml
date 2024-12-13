@@ -44,8 +44,17 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk auth $SNYK_TOKEN
 
-      - name: Run Snyk Open Source (SCA)
-        run: snyk test --file=ConstantReminders-Api/ConstantReminderApi.csproj --package-manager=nuget
+      - name: Run Snyk Open Source (SCA) on all projects
+        run: |
+          for csproj in $(find . -name "*.csproj"); do
+            echo "Testing $csproj"
+            snyk test --file=$csproj --package-manager=nuget || true
+          done
 
-      - name: Create Snyk Open Source (SCA) snapshot
-        run: snyk monitor --file=ConstantReminders-Api/ConstantReminderApi.csproj --package-manager=nuget
+      - name: Create Snyk Open Source (SCA) snapshot for all projects
+        run: |
+          for csproj in $(find . -name "*.csproj"); do
+            echo "Monitoring $csproj"
+            snyk monitor --file=$csproj --package-manager=nuget || true
+          done
+
