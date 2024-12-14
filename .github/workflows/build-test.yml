@@ -53,25 +53,33 @@ jobs:
           # Optional extra command arguments the the SonarScanner 'begin' command
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
 
-      - name: Install Snyk
-        run: |
-          sudo npm install -g snyk
-
-      - name: Authenticate Snyk
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/dotnet@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk auth $SNYK_TOKEN
+        with:
+          command: monitor
+          args: --severity-threshold=high
 
-      - name: Run Snyk Open Source (SCA) on all projects
-        run: |
-          for csproj in $(find . -name "*.csproj"); do
-            echo "Testing $csproj"
-            snyk test --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
-          done
+      # - name: Install Snyk
+      #   run: |
+      #     sudo npm install -g snyk
 
-      - name: Create Snyk Open Source (SCA) snapshot for all projects
-        run: |
-          for csproj in $(find . -name "*.csproj"); do
-            echo "Monitoring $csproj"
-            snyk monitor --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
-          done
+      # - name: Authenticate Snyk
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      #   run: snyk auth $SNYK_TOKEN
+
+      # - name: Run Snyk Open Source (SCA) on all projects
+      #   run: |
+      #     for csproj in $(find . -name "*.csproj"); do
+      #       echo "Testing $csproj"
+      #       snyk test --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
+      #     done
+
+      # - name: Create Snyk Open Source (SCA) snapshot for all projects
+      #   run: |
+      #     for csproj in $(find . -name "*.csproj"); do
+      #       echo "Monitoring $csproj"
+      #       snyk monitor --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
+      #     done
