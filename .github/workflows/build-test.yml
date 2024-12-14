@@ -39,7 +39,7 @@ jobs:
       #   run: |
       #     dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.opencover.xml
 
-      - name: SonarScanner for .NET 9 with pull request decoration support
+      - name: Unit Tests + SonarScanner with pull request decoration support
         uses: highbyte/sonarscan-dotnet@v2.4.1
         with:
           # The key of the SonarQube project
