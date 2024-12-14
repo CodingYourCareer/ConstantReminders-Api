@@ -66,12 +66,12 @@ jobs:
         run: |
           for csproj in $(find . -name "*.csproj"); do
             echo "Testing $csproj"
-            snyk test --file=$csproj --package-manager=nuget || true
+            snyk test --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
           done
 
       - name: Create Snyk Open Source (SCA) snapshot for all projects
         run: |
           for csproj in $(find . -name "*.csproj"); do
             echo "Monitoring $csproj"
-            snyk monitor --file=$csproj --package-manager=nuget || true
+            snyk monitor --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
           done
