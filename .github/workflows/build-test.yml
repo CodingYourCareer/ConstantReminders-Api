@@ -59,7 +59,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: monitor
-          args: --severity-threshold=high --file=./ConstantReminders-Api/ConstantReminderApi.csproj
+          args: --severity-threshold=high --file=./ConstantReminders-Api/ConstantReminderApi.csproj --package-manager=nuget
 
       # - name: Install Snyk
       #   run: |
