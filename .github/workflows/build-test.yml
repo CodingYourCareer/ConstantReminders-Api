@@ -62,26 +62,3 @@ jobs:
         with:
           command: monitor
           args: --severity-threshold=high --file=./ConstantReminders-Api.sln
-
-      # - name: Install Snyk
-      #   run: |
-      #     sudo npm install -g snyk
-
-      # - name: Authenticate Snyk
-      #   env:
-      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      #   run: snyk auth $SNYK_TOKEN
-
-      # - name: Run Snyk Open Source (SCA) on all projects
-      #   run: |
-      #     for csproj in $(find . -name "*.csproj"); do
-      #       echo "Testing $csproj"
-      #       snyk test --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
-      #     done
-
-      # - name: Create Snyk Open Source (SCA) snapshot for all projects
-      #   run: |
-      #     for csproj in $(find . -name "*.csproj"); do
-      #       echo "Monitoring $csproj"
-      #       snyk monitor --file=$csproj --package-manager=nuget --project-name=$(basename $csproj .csproj) || true
-      #     done
