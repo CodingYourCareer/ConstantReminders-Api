@@ -39,18 +39,13 @@ jobs:
         run: |
           dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.opencover.xml
 
-      - name: Unit Tests + SonarScanner with pull request decoration support
+      - name: Unit Tests + SonarScanner
         uses: highbyte/sonarscan-dotnet@v2.4.1
         with:
-          # The key of the SonarQube project
           sonarProjectKey: CodingYourCareer_ConstantReminders-Api
-          # The name of the SonarQube project
           sonarProjectName:  ConstantReminders-Api
-          # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
           sonarOrganization: codingyourcareer
-          # Optional command arguments to dotnet test
           dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          # Optional extra command arguments the the SonarScanner 'begin' command
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
 
       - name: Run Snyk test to check for vulnerabilities
