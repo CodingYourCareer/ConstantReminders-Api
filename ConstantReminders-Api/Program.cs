@@ -18,4 +18,4 @@ log.Information("Hi there! How are you ?");
 app.MapGet("/health", () => new {status = "healthy"});
 
 app.Run();
-public partial class AppProgram { }
+public partial class Program { }
