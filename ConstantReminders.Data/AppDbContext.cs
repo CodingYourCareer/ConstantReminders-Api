@@ -34,7 +34,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.Id = Guid.CreateVersion7();
+                    entity.Id = entity.Id == Guid.Empty ? Guid.CreateVersion7() : entity.Id;
                     entity.CreatedDateTime = now;
                 }
             }
@@ -59,7 +59,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.Id = Guid.CreateVersion7();
+                    entity.Id = entity.Id == Guid.Empty ? Guid.CreateVersion7() : entity.Id;
                     entity.CreatedDateTime = now;
                 }
             }
