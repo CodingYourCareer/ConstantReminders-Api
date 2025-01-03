@@ -1,12 +1,12 @@
-using ConstantReminderApi.Handlers;
+using System.Text.Json.Serialization;
+using Asp.Versioning;
+using ConstantReminder.Api.Extensions;
+using ConstantReminder.Api.Handlers;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
 using ConstantReminders.Data;
+using ConstantReminders.ServiceDefaults;
 using ConstantReminders.Services;
-using Serilog;
-using System.Text.Json.Serialization;
-using Asp.Versioning;
-using ConstantReminderApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,7 +59,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -67,15 +66,15 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 
-await using var log = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Console().CreateLogger();
-
-log.Verbose("Preparing for development...");
-
-await app.MigrateDatabaseAsync();
+if (!app.Environment.IsEnvironment("UnitTest"))
+{
+    await app.MigrateDatabaseAsync();
+}
 
 app.MapAEventEndpoints();
 
-app.MapGet("/health", () => new {status = "healthy"});
-
 await app.RunAsync();
-public partial class Program { }
+namespace ConstantReminder.Api
+{
+    public partial class Program { }
+}

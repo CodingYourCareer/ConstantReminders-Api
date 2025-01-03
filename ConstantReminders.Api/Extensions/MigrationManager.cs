@@ -1,7 +1,7 @@
 ﻿using ConstantReminders.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConstantReminderApi.Extensions;
+namespace ConstantReminder.Api.Extensions;
 
 public static class MigrationManager
 {

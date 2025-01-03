@@ -17,7 +17,7 @@
 
 using ConstantReminders.Contracts.Models;
 
-namespace ConstantReminderApi.Utility;
+namespace ConstantReminder.Api.Utility;
 
 public static class ApiResponse
 {

@@ -15,13 +15,13 @@
 // ---------------------------------------------------------------------------
 #endregion
 
-using ConstantReminderApi.Utility;
+using ConstantReminder.Api.Utility;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Models;
 using Microsoft.AspNetCore.Mvc;
 using ApiVersion = Asp.Versioning.ApiVersion;
 
-namespace ConstantReminderApi.Handlers;
+namespace ConstantReminder.Api.Handlers;
 
 public static class EventHandler
 {
@@ -45,12 +45,26 @@ public static class EventHandler
             });
     }
 
-    private static async Task<IResult> CreateEvent([FromServices] IEventService eventService, [FromBody] CreateEventDto newEvent)
+    public static async Task<IResult> CreateEvent(
+        [FromServices] IEventService eventService,
+        [FromBody] CreateEventDto newEvent,
+        HttpContext httpContext
+    )
     {
-        // TODO: How to get http context in minimal API
-        //var userId from HttpContext.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-        var result = await eventService.CreateEvent(newEvent.Name, "put auth0 user id here");
+        // Retrieve the user's "sub" claim (e.g. Auth0 user ID) from the HttpContext.
+        var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
+        // If the userId claim doesn't exist (or is empty), return an appropriate status code.
+        // Typically, missing authentication credentials is a "401 Unauthorized".
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Results.Unauthorized();
+        }
+
+        // Call your service logic to create the event, associating it with the current user.
+        var result = await eventService.CreateEvent(newEvent.Name, userId);
+
+        // Convert service result to a proper HTTP response (e.g., 200/201) using your ApiResponse helper.
         return ApiResponse.GetActionResult(result);
     }
 }

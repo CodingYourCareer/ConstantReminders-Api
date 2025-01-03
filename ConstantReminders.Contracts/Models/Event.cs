@@ -19,7 +19,7 @@ namespace ConstantReminders.Contracts.Models;
 
 public class Event : IEntity
 {
-    public required Guid Id { get; set; }
+    public virtual required Guid Id { get; set; }
     public required string Name { get; set; }
     public DateTime CreatedDateTime { get; set; }
     public DateTime UpdatedDateTime { get; set; }
