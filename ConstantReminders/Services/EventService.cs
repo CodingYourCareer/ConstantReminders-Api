@@ -33,11 +33,9 @@ public class EventService(IBaseRepository<Event> eventRepo) : IEventService
             Name = name,
             CreatedBy = createdById,
             UpdatedBy = createdById,
-            CreatedDateTime = DateTime.UtcNow,
-            UpdatedDateTime = DateTime.UtcNow
         };
 
-        var result = await eventRepo.Persist(createEvent);
+        var result = await eventRepo.CreateAsync(createEvent);
 
         return new ResponseDetail<Event>
         {

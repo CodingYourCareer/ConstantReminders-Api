@@ -21,8 +21,8 @@ public class Event : IEntity
 {
     public required Guid Id { get; set; }
     public required string Name { get; set; }
-    public required DateTime CreatedDateTime { get; set; }
-    public required DateTime UpdatedDateTime { get; set; }
+    public DateTime CreatedDateTime { get; set; }
+    public DateTime UpdatedDateTime { get; set; }
     public required string CreatedBy { get; set; }
     public required string UpdatedBy { get; set; }
 }
