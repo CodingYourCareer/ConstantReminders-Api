@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace ConstantReminders_Api.Tests
 {
