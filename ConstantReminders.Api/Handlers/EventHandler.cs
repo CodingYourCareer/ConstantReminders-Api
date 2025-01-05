@@ -19,6 +19,7 @@ using ConstantReminder.Api.Utility;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ApiVersion = Asp.Versioning.ApiVersion;
 
 namespace ConstantReminder.Api.Handlers;
@@ -42,7 +43,7 @@ public static class EventHandler
             {
                 Summary = "Generate a new Event Item",
                 Description = "Generates a new Event for your calendar."
-            });
+            }).RequireAuthorization();
 
         app.MapGet($"{BaseRoute}", ListEvents)
             .Produces<ResponseDetail<(List<Event>?, string?)>>(StatusCodes.Status200OK)
@@ -52,7 +53,7 @@ public static class EventHandler
             {
                 Summary = "List all Events in Database",
                 Description = "Lists all events in database.."
-            });
+            }).RequireAuthorization();
     }
 
     public static async Task<IResult> CreateEvent(
@@ -62,7 +63,7 @@ public static class EventHandler
     )
     {
         // Retrieve the user's "sub" claim (e.g. Auth0 user ID) from the HttpContext.
-        var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         // If the userId claim doesn't exist (or is empty), return an appropriate status code.
         // Typically, missing authentication credentials is a "401 Unauthorized".

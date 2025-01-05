@@ -18,10 +18,10 @@
 using ConstantReminder.Api.Handlers;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
+using System.Security.Claims;
 using EventHandler = ConstantReminder.Api.Handlers.EventHandler;
 
 namespace ConstantReminders.Api.Tests.Api.Handlers;
@@ -116,5 +116,4 @@ public class EventEndpointsTests
         // Use IsType to verify we got an Unauthorized result.
         Assert.IsType<UnauthorizedHttpResult>(result);
     }
-
 }
