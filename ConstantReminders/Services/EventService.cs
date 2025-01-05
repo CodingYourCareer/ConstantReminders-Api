@@ -45,4 +45,17 @@ public class EventService(IBaseRepository<Event> eventRepo) : IEventService
             Status = ResultStatus.Created201
         };
     }
+
+    public async Task<ResponseDetail<List<Event>>> ListEvents()
+    {
+        var result = await eventRepo.List();
+
+        return new ResponseDetail<List<Event>>
+        {
+            Data = result,
+            Message = $"Found {result.Count} events",
+            SubCode = SubCode,
+            Status = ResultStatus.Ok200
+        };
+    }
 }

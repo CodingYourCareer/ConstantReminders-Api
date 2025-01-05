@@ -7,6 +7,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IEntity
     Task<bool> ExistsAsync(Guid id);
     Task<TResult> ExecuteInTransactionAsync<TResult>(Func<Task<TResult>> operation);
     Task<TEntity> CreateAsync(TEntity entity);
+    Task<List<TEntity>> List();
     Task<TEntity?> GetByIdAsync(Guid id);
     Task<TEntity> UpdateAsync(TEntity entity);
     Task DeleteAsync(Guid id);

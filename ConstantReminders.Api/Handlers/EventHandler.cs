@@ -43,6 +43,16 @@ public static class EventHandler
                 Summary = "Generate a new Event Item",
                 Description = "Generates a new Event for your calendar."
             });
+
+        app.MapGet($"{BaseRoute}", ListEvents)
+            .Produces<ResponseDetail<(List<Event>?, string?)>>(StatusCodes.Status200OK)
+            .WithApiVersionSet(versionSet)
+            .MapToApiVersion(1.0)
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "List all Events in Database",
+                Description = "Lists all events in database.."
+            });
     }
 
     public static async Task<IResult> CreateEvent(
@@ -65,6 +75,14 @@ public static class EventHandler
         var result = await eventService.CreateEvent(newEvent.Name, userId);
 
         // Convert service result to a proper HTTP response (e.g., 200/201) using your ApiResponse helper.
+        return ApiResponse.GetActionResult(result);
+    }
+
+    public static async Task<IResult> ListEvents(
+        [FromServices] IEventService eventService)
+    {
+        var result = await eventService.ListEvents();
+
         return ApiResponse.GetActionResult(result);
     }
 }

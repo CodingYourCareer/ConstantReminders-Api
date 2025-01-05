@@ -43,6 +43,11 @@ public class BaseRepository<TEntity>(AppDbContext context) : IBaseRepository<TEn
         return entity;
     }
 
+    public async Task<List<TEntity>> List()
+    {
+        return await context.Set<TEntity>().ToListAsync();
+    }
+
     public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         return await context.Set<TEntity>().FindAsync(id);

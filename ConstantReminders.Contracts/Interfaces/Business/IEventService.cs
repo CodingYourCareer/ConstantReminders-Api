@@ -23,4 +23,5 @@ namespace ConstantReminders.Contracts.Interfaces.Business;
 public interface IEventService
 {
     Task<ResponseDetail<Event>> CreateEvent(string name, string createdById);
+    Task<ResponseDetail<List<Event>>> ListEvents();
 }
