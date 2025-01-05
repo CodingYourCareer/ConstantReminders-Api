@@ -3,17 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders-Api.Tests", "ConstantReminders-Api.Tests\ConstantReminders-Api.Tests.csproj", "{47765B05-6D9F-451E-BC67-3B834FFA20CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders.Api.Tests", "ConstantReminders.Api.Tests\ConstantReminders.Api.Tests.csproj", "{47765B05-6D9F-451E-BC67-3B834FFA20CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminderApi", "ConstantReminders-Api\ConstantReminderApi.csproj", "{620C1599-ED59-4890-8F1D-E1BB40273EEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminder.Api", "ConstantReminders.Api\ConstantReminder.Api.csproj", "{620C1599-ED59-4890-8F1D-E1BB40273EEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders.Contracts", "ConstantReminders.Contracts\ConstantReminders.Contracts.csproj", "{B1EA3DDD-DB2C-4796-9267-71F7AF94FCED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders", "ConstantReminders\ConstantReminders.csproj", "{261CBAA9-5567-4D2D-90AB-B878D6AB7D2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders.Data", "ConstantReminders.Data\ConstantReminders.Data.csproj", "{5498E81D-C480-4FBB-A51E-A7A45C586D2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders.AppHost", "ConstantReminders.AppHost\ConstantReminders.AppHost.csproj", "{E96CEDE5-314D-400B-A361-8D7E5F1D0A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstantReminders.ServiceDefaults", "ConstantReminders.ServiceDefaults\ConstantReminders.ServiceDefaults.csproj", "{6A291F04-D9F5-4262-A7BE-F0649C6AA3D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{47765B05-6D9F-451E-BC67-3B834FFA20CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +31,28 @@ Global
 		{620C1599-ED59-4890-8F1D-E1BB40273EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{620C1599-ED59-4890-8F1D-E1BB40273EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{620C1599-ED59-4890-8F1D-E1BB40273EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1EA3DDD-DB2C-4796-9267-71F7AF94FCED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1EA3DDD-DB2C-4796-9267-71F7AF94FCED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1EA3DDD-DB2C-4796-9267-71F7AF94FCED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1EA3DDD-DB2C-4796-9267-71F7AF94FCED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261CBAA9-5567-4D2D-90AB-B878D6AB7D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261CBAA9-5567-4D2D-90AB-B878D6AB7D2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261CBAA9-5567-4D2D-90AB-B878D6AB7D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261CBAA9-5567-4D2D-90AB-B878D6AB7D2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5498E81D-C480-4FBB-A51E-A7A45C586D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5498E81D-C480-4FBB-A51E-A7A45C586D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5498E81D-C480-4FBB-A51E-A7A45C586D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5498E81D-C480-4FBB-A51E-A7A45C586D2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96CEDE5-314D-400B-A361-8D7E5F1D0A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96CEDE5-314D-400B-A361-8D7E5F1D0A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96CEDE5-314D-400B-A361-8D7E5F1D0A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96CEDE5-314D-400B-A361-8D7E5F1D0A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A291F04-D9F5-4262-A7BE-F0649C6AA3D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A291F04-D9F5-4262-A7BE-F0649C6AA3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A291F04-D9F5-4262-A7BE-F0649C6AA3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A291F04-D9F5-4262-A7BE-F0649C6AA3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
