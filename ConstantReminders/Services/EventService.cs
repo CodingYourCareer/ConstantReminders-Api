@@ -33,6 +33,7 @@ public class EventService(IBaseRepository<Event> eventRepo) : IEventService
             Name = name,
             CreatedBy = createdById,
             UpdatedBy = createdById,
+            
         };
 
         var result = await eventRepo.CreateAsync(createEvent);
