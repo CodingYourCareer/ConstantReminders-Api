@@ -1,21 +1,25 @@
 ﻿using ConstantReminders.Contracts.Models;
+using ConstantReminders.Data.Model;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 
 namespace ConstantReminders.Data;
 
 // dotnet ef migrations add InitialMigration --project ../ConstantReminders.Data/ConstantReminders.Data.csproj  --context AppDbContext
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Event> Events => Set<Event>();
+    public DbSet<Event> Events => Set<Event>(); 
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<Event>(entity =>
         {
             entity.HasKey(x => x.Id);
         });
+
+        modelBuilder.ApplyConfiguration(new Configuration.UserConfiguration());
+        base.OnModelCreating(modelBuilder);
     }
 
     public override int SaveChanges()
