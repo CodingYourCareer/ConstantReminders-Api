@@ -21,7 +21,8 @@ namespace ConstantReminders.Contracts.Models
         public required TimeSpan FrequencyWithinDay { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        // public Event? Event { get; set; }
+        public Guid EventId { get; set; }
+        public Event Event { get; set; }
         public required List<DaysOfWeekEntity> DaysOfWeek { get; set; }
         public int? DurationInDays { get; set; }
 

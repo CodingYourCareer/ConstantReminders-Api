@@ -3,6 +3,7 @@ using System;
 using ConstantReminders.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ConstantReminders.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250129000815_EventSchedule")]
+    partial class EventSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,6 +92,10 @@ namespace ConstantReminders.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<Guid?>("NotificationScheduleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("notification_schedule_id");
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnType("text")
@@ -100,6 +107,9 @@ namespace ConstantReminders.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_events");
+
+                    b.HasIndex("NotificationScheduleId")
+                        .HasDatabaseName("ix_events_notification_schedule_id");
 
                     b.ToTable("events", (string)null);
                 });
@@ -128,10 +138,6 @@ namespace ConstantReminders.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("end_time");
 
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("event_id");
-
                     b.Property<TimeSpan>("FrequencyWithinDay")
                         .HasColumnType("interval")
                         .HasColumnName("frequency_within_day");
@@ -156,10 +162,6 @@ namespace ConstantReminders.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_notification_schedule");
 
-                    b.HasIndex("EventId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_notification_schedule_event_id");
-
                     b.ToTable("notification_schedule", (string)null);
                 });
 
@@ -173,20 +175,13 @@ namespace ConstantReminders.Data.Migrations
                     b.Navigation("NotificationSchedule");
                 });
 
-            modelBuilder.Entity("ConstantReminders.Contracts.Models.NotificationSchedule", b =>
-                {
-                    b.HasOne("ConstantReminders.Contracts.Models.Event", "Event")
-                        .WithOne("NotificationSchedule")
-                        .HasForeignKey("ConstantReminders.Contracts.Models.NotificationSchedule", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_notification_schedule_events_event_id");
-
-                    b.Navigation("Event");
-                });
-
             modelBuilder.Entity("ConstantReminders.Contracts.Models.Event", b =>
                 {
+                    b.HasOne("ConstantReminders.Contracts.Models.NotificationSchedule", "NotificationSchedule")
+                        .WithMany()
+                        .HasForeignKey("NotificationScheduleId")
+                        .HasConstraintName("fk_events_notification_schedule_notification_schedule_id");
+
                     b.Navigation("NotificationSchedule");
                 });
 

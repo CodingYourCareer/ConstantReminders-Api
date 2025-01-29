@@ -11,6 +11,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Event>()
+            .HasOne(x => x.NotificationSchedule)
+            .WithOne(x => x.Event)
+            .HasForeignKey<NotificationSchedule>(y => y.EventId);
+            
 
         modelBuilder.Entity<Event>(entity =>
         {
