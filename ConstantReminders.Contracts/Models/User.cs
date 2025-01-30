@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using ConstantReminders.Data.Attribute;
 
-namespace ConstantReminders.Data.Model
+
+namespace ConstantReminders.Contracts.Models
 {
     [PhoneOrEmailRequired]
     public class User 
@@ -16,10 +17,4 @@ namespace ConstantReminders.Data.Model
         public DefaultCommunicationMethod DefaultCommunicationMethod {get; set;}
         public required string AuthOId {get; set;}
             }
-
-            public enum DefaultCommunicationMethod
-            {
-                Phone,
-                Email
-            }   
 }

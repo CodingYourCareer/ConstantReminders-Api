@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using ConstantReminders.Data.Model;
+using ConstantReminders.Contracts.Models;
 
 namespace  ConstantReminders.Data.Attribute 
 {
@@ -10,7 +10,7 @@ namespace  ConstantReminders.Data.Attribute
         {
             var user = (User)validationContext.ObjectInstance;
 
-            if (string.IsNullOrEmpty(user.PhoneNumber) && string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrWhiteSpace(user.PhoneNumber) && string.IsNullOrWhiteSpace(user.Email))
             {
                 return new ValidationResult("Either phone number or email is requried.");
             }

@@ -11,4 +11,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConstantReminders.Data\ConstantReminders.Data.csproj" />
+  </ItemGroup>
+
 </Project>
