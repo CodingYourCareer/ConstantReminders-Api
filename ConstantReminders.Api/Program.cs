@@ -4,6 +4,7 @@ using ConstantReminder.Api.Extensions;
 using ConstantReminder.Api.Handlers;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
+using ConstantReminders.Contracts.Models.TwilioConfiguration;
 using ConstantReminders.Data;
 using ConstantReminders.ServiceDefaults;
 using ConstantReminders.Services;
@@ -96,8 +97,19 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddSingleton(x=>{
+    var config = x.GetRequiredService<IConfiguration>();
+    var twilioConfig = new TwilioConfiguration();
+    config.GetSection("TwilioAuth").Bind(twilioConfig);
+    return twilioConfig;
+});
 
+
+
+
+
+
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
