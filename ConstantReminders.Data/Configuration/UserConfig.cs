@@ -1,16 +1,17 @@
-using ConstantReminders.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ConstantReminders.Contracts.Models;
 
-namespace ConstantReminders.Data.Configuration
-{
+namespace ConstantReminders.Data.Configuration;
+
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            // Create an index on Auth0Id
+            builder.HasKey(u => u.Id);
+
             builder.HasIndex(u => u.AuthOId)
                    .IsUnique(); 
         }
     }
-}
+

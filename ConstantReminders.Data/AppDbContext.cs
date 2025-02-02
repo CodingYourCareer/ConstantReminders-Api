@@ -1,5 +1,4 @@
 ﻿using ConstantReminders.Contracts.Models;
-using ConstantReminders.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 
@@ -12,12 +11,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Event>(entity =>
-        {
-            entity.HasKey(x => x.Id);
-        });
-
+    {   
+        modelBuilder.ApplyConfiguration(new Configuration.EventConfiguration());
         modelBuilder.ApplyConfiguration(new Configuration.UserConfiguration());
         base.OnModelCreating(modelBuilder);
     }

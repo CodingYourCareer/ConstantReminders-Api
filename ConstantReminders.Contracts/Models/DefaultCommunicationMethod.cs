@@ -1,8 +1,7 @@
-namespace ConstantReminders.Contracts.Models
+namespace ConstantReminders.Contracts.Models;
+
+public enum DefaultCommunicationMethod
 {
-    public enum DefaultCommunicationMethod
-    {
-        Phone,
-        Email
-    }
+    Phone,
+    Email
 }
