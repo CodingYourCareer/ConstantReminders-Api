@@ -7,11 +7,11 @@ namespace ConstantReminders.Data;
 // dotnet ef migrations add InitialMigration --project ../ConstantReminders.Data/ConstantReminders.Data.csproj  --context AppDbContext
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Event> Events => Set<Event>(); 
+    public DbSet<Event> Events => Set<Event>();
     public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {   
+    {
         modelBuilder.ApplyConfiguration(new Configuration.EventConfiguration());
         modelBuilder.ApplyConfiguration(new Configuration.UserConfiguration());
         base.OnModelCreating(modelBuilder);

@@ -4,14 +4,14 @@ using ConstantReminders.Contracts.Models;
 
 namespace ConstantReminders.Data.Configuration;
 
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
+{
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.HasKey(u => u.Id);
+        builder.HasKey(u => u.Id);
 
-            builder.HasIndex(u => u.AuthOId)
-                   .IsUnique(); 
-        }
+        builder.HasIndex(u => u.AuthOId)
+               .IsUnique();
     }
+}
 
