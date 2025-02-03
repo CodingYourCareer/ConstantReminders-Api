@@ -66,8 +66,7 @@ public class EventEndpointsTests
                 CreatedBy = userId,
                 UpdatedBy = userId,
                 Name = eventName,
-                Id = Guid.CreateVersion7(),
-                 
+                Id = Guid.CreateVersion7()
             }
         };
 

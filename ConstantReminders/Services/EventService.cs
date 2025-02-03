@@ -32,8 +32,7 @@ public class EventService(IBaseRepository<Event> eventRepo) : IEventService
             Id = Guid.CreateVersion7(),
             Name = name,
             CreatedBy = createdById,
-            UpdatedBy = createdById,
-            
+            UpdatedBy = createdById            
         };
 
         var result = await eventRepo.CreateAsync(createEvent);

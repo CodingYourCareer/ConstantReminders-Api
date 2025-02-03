@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstantReminders.Contracts.Enums
+namespace ConstantReminders.Contracts.Enums;
+
+public enum NotificationType
 {
-    public enum NotificationType
-    {
-        Single,
-        Daily,
-        Weekly,
-        Monthly,
-        RepeatedWithinDay,
-        Custom
-    }
+    Single,
+    Daily,
+    Weekly,
+    Monthly,
+    RepeatedWithinDay,
+    Custom
 }
