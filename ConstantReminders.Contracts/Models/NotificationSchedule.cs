@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace ConstantReminders.Contracts.Models;
 
 public class NotificationSchedule : IEntity
-
 {    
     public virtual required Guid Id { get; set; }
     public required NotificationType NotificationType { get; set; }
