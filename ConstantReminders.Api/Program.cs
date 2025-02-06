@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -104,14 +105,10 @@ builder.Services.AddSingleton(x=>{
     return twilioConfig;
 });
 
-
-
-
-
-
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<ITwilioService, TwilioService>();
 
 var app = builder.Build();
 
