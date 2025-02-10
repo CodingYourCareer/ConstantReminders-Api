@@ -1,5 +1,6 @@
 ﻿using ConstantReminders.Contracts.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 
 namespace ConstantReminders.Data;
 
@@ -7,20 +8,13 @@ namespace ConstantReminders.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Event> Events => Set<Event>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new Configuration.EventConfiguration());
+        modelBuilder.ApplyConfiguration(new Configuration.UserConfiguration());
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Event>()
-            .HasOne(x => x.NotificationSchedule)
-            .WithOne(x => x.Event)
-            .HasForeignKey<NotificationSchedule>(y => y.EventId);
-            
-
-        modelBuilder.Entity<Event>(entity =>
-        {
-            entity.HasKey(x => x.Id);
-        });
     }
 
     public override int SaveChanges()
