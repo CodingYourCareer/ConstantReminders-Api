@@ -25,4 +25,5 @@ public class Event : IEntity
     public DateTime UpdatedDateTime { get; set; }
     public required string CreatedBy { get; set; }
     public required string UpdatedBy { get; set; }
+    public  NotificationSchedule? NotificationSchedule { get; set; }
 }

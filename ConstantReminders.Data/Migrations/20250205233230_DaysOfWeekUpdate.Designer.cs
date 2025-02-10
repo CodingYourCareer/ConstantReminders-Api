@@ -3,6 +3,7 @@ using System;
 using ConstantReminders.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ConstantReminders.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205233230_DaysOfWeekUpdate")]
+    partial class DaysOfWeekUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,6 +78,7 @@ namespace ConstantReminders.Data.Migrations
             modelBuilder.Entity("ConstantReminders.Contracts.Models.Event", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
@@ -106,18 +110,13 @@ namespace ConstantReminders.Data.Migrations
 
                     b.ToTable("events", (string)null);
                 });
-            modelBuilder.Entity("ConstantReminders.Contracts.Models.User", b =>
 
+            modelBuilder.Entity("ConstantReminders.Contracts.Models.NotificationSchedule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<string>("AuthOId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("auth_o_id");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -128,26 +127,29 @@ namespace ConstantReminders.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_date_time");
 
-                    b.Property<int>("DefaultCommunicationMethod")
+                    b.Property<int?>("DurationInDays")
                         .HasColumnType("integer")
-                        .HasColumnName("default_communication_method");
+                        .HasColumnName("duration_in_days");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("text")
-                        .HasColumnName("email");
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_time");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text")
-                        .HasColumnName("first_name");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_id");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("last_name");
+                    b.Property<TimeSpan>("FrequencyWithinDay")
+                        .HasColumnType("interval")
+                        .HasColumnName("frequency_within_day");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text")
-                        .HasColumnName("phone_number");
+                    b.Property<int>("NotificationType")
+                        .HasColumnType("integer")
+                        .HasColumnName("notification_type");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_time");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -159,13 +161,47 @@ namespace ConstantReminders.Data.Migrations
                         .HasColumnName("updated_date_time");
 
                     b.HasKey("Id")
-                        .HasName("pk_users");
+                        .HasName("pk_notification_schedule");
 
-                    b.HasIndex("AuthOId")
+                    b.HasIndex("EventId")
                         .IsUnique()
-                        .HasDatabaseName("ix_users_auth_o_id");
+                        .HasDatabaseName("ix_notification_schedule_event_id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("notification_schedule", (string)null);
+                });
+
+            modelBuilder.Entity("ConstantReminders.Contracts.Models.DaysOfWeekEntity", b =>
+                {
+                    b.HasOne("ConstantReminders.Contracts.Models.NotificationSchedule", "NotificationSchedule")
+                        .WithMany("DaysOfWeek")
+                        .HasForeignKey("NotificationScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_days_of_week_entity_notification_schedule_notification_sche");
+
+                    b.Navigation("NotificationSchedule");
+                });
+
+            modelBuilder.Entity("ConstantReminders.Contracts.Models.NotificationSchedule", b =>
+                {
+                    b.HasOne("ConstantReminders.Contracts.Models.Event", "Event")
+                        .WithOne("NotificationSchedule")
+                        .HasForeignKey("ConstantReminders.Contracts.Models.NotificationSchedule", "EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_notification_schedule_events_event_id");
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("ConstantReminders.Contracts.Models.Event", b =>
+                {
+                    b.Navigation("NotificationSchedule");
+                });
+
+            modelBuilder.Entity("ConstantReminders.Contracts.Models.NotificationSchedule", b =>
+                {
+                    b.Navigation("DaysOfWeek");
                 });
 #pragma warning restore 612, 618
         }

@@ -63,7 +63,7 @@ public static class EventHandler
     )
     {
         // Retrieve the user's "sub" claim (e.g. Auth0 user ID) from the HttpContext.
-        var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = httpContext.User.FindFirst("sub")?.Value;
 
         // If the userId claim doesn't exist (or is empty), return an appropriate status code.
         // Typically, missing authentication credentials is a "401 Unauthorized".
