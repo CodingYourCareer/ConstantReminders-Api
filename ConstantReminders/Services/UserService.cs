@@ -1,21 +1,16 @@
 ﻿
+using System;
+using ConstantReminders.Contracts.Interfaces.Business;
+using ConstantReminders.Contracts.Interfaces.Data;
 using ConstantReminders.Contracts.Models;
 
 namespace ConstantReminders.Services
 {
-    public class UserService
+    public class UserService(IBaseRepository<User> userRepo) : IUserService
     {
-        private List<User> users;
-
-        public UserService() 
-        { 
-            users = new List<User>();
-        }
-
-        //Create a new user and adds it to the users
-        public User CreateUser(string firstName, string lastName,
-               string phoneNumber, string email,
-               string auth0Id, string createdBy)
+       
+        public async Task<User> CreateUser(string firstName, string lastName,
+               string phoneNumber, string email, string auth0Id, string createdBy)
         {
             var newUser = new User
             {
@@ -32,55 +27,56 @@ namespace ConstantReminders.Services
 
             };
 
-            users.Add(newUser);
-            return newUser;
+           var result =  await userRepo.CreateAsync(newUser);
 
+            return result;
         }
 
-        // Returns a list of all users 
-        public List<User> GetUsers()
+        public async Task <List<User>> GetUsers()
         {
-            return users;
 
+            var result = await userRepo.List();
+            return result;
+          
+            
         }
 
-        // Returns a user based on the given Id. No user found, returns null
-        public User? GetUserById(Guid id)
+
+        public async Task<User?> GetUserById(Guid id)
         {
-            return users.FirstOrDefault(u => u.Id == id);
+            return await userRepo.GetByIdAsync(id);
         }
 
-        //Updates a user's information. If the user is not, return null
-        public User? UpdateUser (Guid id, string firstname,
-            string lastname, string phoneNumber,string email, 
-            string auth0Id, string createdBy)
+
+        public async Task<User?> UpdateUser(Guid id, string firstName, string lastName, string phoneNumber,
+            string email, string auth0Id, string updatedBy)
         {
-            var user = users.FirstOrDefault(u => u.Id == id);
+            var user = await userRepo.GetByIdAsync(id);
             if (user == null)
                 return null;
 
-            user.FirstName = firstname;
-            user.LastName = lastname;
+            user.FirstName = firstName;
+            user.LastName = lastName;
             user.PhoneNumber = phoneNumber;
             user.Email = email;
             user.AuthOId = auth0Id;
             user.UpdatedDateTime = DateTime.Now;
-            user.UpdatedBy = createdBy;
+            user.UpdatedBy = updatedBy;
 
+            await userRepo.UpdateAsync(user);
             return user;
-
         }
 
-        //Remove a user by their Id. If no user is found, returns false
-        public bool DeleteUser(Guid id)
+
+        public async Task<User?> DeleteUser(Guid id)
         {
-            var user = users.FirstOrDefault(u => u.Id == id);
-            if (user == null) return false;
+            var user = await userRepo.GetByIdAsync(id);
+            if (user == null) return null;
 
-            users.Remove(user);
-            return true;
-
+            await userRepo.DeleteAsync(user);
+            return user;
         }
 
+     
     }
 }
