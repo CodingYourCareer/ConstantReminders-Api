@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ConstantReminders.Contracts.Policy.OwnerPolicy;
-
+//allows for injection of policy dependency
 public class OwnerPolicyRequirement : IAuthorizationRequirement 
 {
     public OwnerPolicyRequirement() { }

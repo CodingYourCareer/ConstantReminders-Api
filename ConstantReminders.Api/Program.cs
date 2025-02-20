@@ -4,6 +4,8 @@ using ConstantReminder.Api.Extensions;
 using ConstantReminder.Api.Handlers;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
+using ConstantReminders.Contracts.Policy;
+using ConstantReminders.Contracts.Policy.OwnerPolicy;
 using ConstantReminders.Data;
 using ConstantReminders.ServiceDefaults;
 using ConstantReminders.Services;
@@ -95,8 +97,11 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero
         };
     });
-
-builder.Services.AddAuthorization();
+//implements authorization for policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.OwnerPolicy, policy => policy.Requirements.Add(new OwnerPolicyRequirement()));
+});
 
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
