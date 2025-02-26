@@ -6,7 +6,7 @@ using ConstantReminders.Contracts.Models;
 
 namespace ConstantReminders.Api.Tests.Api.Policies;
 
-public class PolicyTests
+public class OwnerPolicyTests
 {
     [Fact]
     public async Task UserOwnsResource_Succeeds()

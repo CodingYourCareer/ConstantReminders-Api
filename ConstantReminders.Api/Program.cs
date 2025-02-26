@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using ConstantReminder.Api.Extensions;
@@ -123,5 +124,6 @@ app.MapAEventEndpoints();
 await app.RunAsync();
 namespace ConstantReminder.Api
 {
+    [ExcludeFromCodeCoverage]
     public partial class Program { }
 }
