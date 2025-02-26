@@ -1,30 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConstantReminders.Contracts.Models;
+﻿using ConstantReminders.Contracts.DTO;
 
 namespace ConstantReminders.Contracts.Interfaces.Business
 {
     public interface IUserService
     {
+        Task<UserDto> CreateUser(CreateUpdateUserDto dto, string createdBy, string auth0Id);
 
-        Task<User> CreateUser(string firstName, string lastName,
-              string phoneNumber, string email, string auth0Id, string createdBy);
+        Task<List<UserDto>> GetUsers();
 
-        Task<List<User>> GetUsers();
+        Task<UserDto?> GetUserById(Guid id);
 
-        Task<User?> GetUserById(Guid id);
+        Task<UserDto?> UpdateUser(CreateUpdateUserDto dto, Guid id, string updatedBy);
 
-
-        Task<User?> UpdateUser(Guid id, string firstName, string lastName, string phoneNumber,
-            string email, string auth0Id, string updatedBy);
-
-        Task<User?> DeleteUser(Guid id);
-    
-
-
-
+        Task<bool> DeleteUser(Guid id);
     }
 }

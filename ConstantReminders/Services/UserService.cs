@@ -1,7 +1,7 @@
-﻿
-using System;
+﻿using ConstantReminders.Contracts.DTO;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
+using ConstantReminders.Contracts.Mapper;
 using ConstantReminders.Contracts.Models;
 
 namespace ConstantReminders.Services
@@ -9,74 +9,58 @@ namespace ConstantReminders.Services
     public class UserService(IBaseRepository<User> userRepo) : IUserService
     {
        
-        public async Task<User> CreateUser(string firstName, string lastName,
-               string phoneNumber, string email, string auth0Id, string createdBy)
+        public async Task<UserDto> CreateUser(CreateUpdateUserDto dto, string createdBy, string auth0Id)
         {
-            var newUser = new User
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                PhoneNumber = phoneNumber,
-                Email = email,
-                AuthOId = auth0Id,
-                CreatedDateTime = DateTime.Now,
-                UpdatedDateTime = DateTime.Now,
-                CreatedBy = createdBy,
-                UpdatedBy = createdBy
+            var newUser = dto.ToEntity(createdBy, auth0Id);
 
-            };
+            newUser.CreatedDateTime = DateTime.UtcNow;
 
-           var result =  await userRepo.CreateAsync(newUser);
+            var result =  await userRepo.CreateAsync(newUser);
 
-            return result;
+            return result.ToDto();
         }
 
-        public async Task <List<User>> GetUsers()
+        public async Task <List<UserDto>> GetUsers()
         {
-
             var result = await userRepo.List();
-            return result;
-          
-            
+            return result.Select(x => x.ToDto()).ToList();
         }
 
 
-        public async Task<User?> GetUserById(Guid id)
+        public async Task<UserDto?> GetUserById(Guid id)
         {
-            return await userRepo.GetByIdAsync(id);
+            var result = await userRepo.GetByIdAsync(id);
+            return result?.ToDto();
         }
 
 
-        public async Task<User?> UpdateUser(Guid id, string firstName, string lastName, string phoneNumber,
-            string email, string auth0Id, string updatedBy)
+        public async Task<UserDto?> UpdateUser(CreateUpdateUserDto dto, Guid id, string updatedBy)
         {
             var user = await userRepo.GetByIdAsync(id);
             if (user == null)
                 return null;
 
-            user.FirstName = firstName;
-            user.LastName = lastName;
-            user.PhoneNumber = phoneNumber;
-            user.Email = email;
-            user.AuthOId = auth0Id;
-            user.UpdatedDateTime = DateTime.Now;
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.Email = dto.Email;
+            user.DefaultCommunicationMethod = dto.DefaultCommunicationMethod;
+            user.UpdatedDateTime = DateTime.UtcNow;
             user.UpdatedBy = updatedBy;
 
             await userRepo.UpdateAsync(user);
-            return user;
+            return user.ToDto();
         }
 
 
-        public async Task<User?> DeleteUser(Guid id)
+        public async Task<bool> DeleteUser(Guid id)
         {
             var user = await userRepo.GetByIdAsync(id);
-            if (user == null) return null;
+            if (user == null) return false;
 
             await userRepo.DeleteAsync(user);
-            return user;
-        }
 
-     
+            return true;
+        }
     }
 }
