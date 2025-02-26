@@ -46,7 +46,7 @@ jobs:
           sonarProjectName:  ConstantReminders-Api
           sonarOrganization: codingyourcareer
           dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          sonarBeginArguments: >
+          sonarBeginArguments: |
             /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
             /d:sonar.exclusions="**/Program.cs"
 
