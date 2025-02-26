@@ -47,8 +47,10 @@ jobs:
           sonarOrganization: codingyourcareer
           dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           sonarBeginArguments: |
-            /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+            /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml"
+            /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
             /d:sonar.exclusions="**/Program.cs"
+            /d:sonar.scanner.scanAll=false
 
       - name: Run Snyk test to check for vulnerabilities
         uses: snyk/actions/dotnet@master
