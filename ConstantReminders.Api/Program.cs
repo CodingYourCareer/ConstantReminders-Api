@@ -6,7 +6,6 @@ using ConstantReminder.Api.Handlers;
 using ConstantReminder.Api.Policies;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
-using ConstantReminders.Contracts.Policy;
 using ConstantReminders.Data;
 using ConstantReminders.ServiceDefaults;
 using ConstantReminders.Services;
@@ -14,121 +13,125 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-
-[ExcludeFromCodeCoverage]
-public class Program()
+namespace ConstantReminder.Api
 {
-    public static void Main(string[] args)
+    [ExcludeFromCodeCoverage]
+    public class Program()
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.AddServiceDefaults();
-        builder.Services.AddHttpContextAccessor();
-
-        builder.Services.ConfigureHttpJsonOptions(options =>
+        public static void Main(string[] args)
         {
-            options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
+            var builder = WebApplication.CreateBuilder(args);
 
-        builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "postgresdb", null,
-            options => { options.UseSnakeCaseNamingConvention(); });
+            builder.AddServiceDefaults();
+            builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddEndpointsApiExplorer();
-
-        builder.Services.AddApiVersioning(options =>
-        {
-            options.DefaultApiVersion = new ApiVersion(1, 0);
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.ReportApiVersions = true;
-            options.ApiVersionReader = new UrlSegmentApiVersionReader();
-        }).AddApiExplorer(options =>
-        {
-            options.GroupNameFormat = "'v'VVV";
-            options.SubstituteApiVersionInUrl = true;
-        });
-
-        builder.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(policyBuilder =>
+            builder.Services.ConfigureHttpJsonOptions(options =>
             {
-                policyBuilder.WithOrigins("http://localhost:3000")  // Your frontend URL
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-            });
-        });
-
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(options =>
-            {
-                options.Authority =
-                    "https://dev-vqwp0iq3eaderlnm.us.auth0.com/"; //TODO: Can move this to configuration item or env var later
-                options.Audience = "http://localhost:5000"; //TODO: Can move this to configuration item or env var later
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                        return Task.CompletedTask;
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        Console.WriteLine("OnMessageReceived: " + context.Token);
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = context =>
-                    {
-                        Console.WriteLine("OnChallenge: " + context.Error);
-                        return Task.CompletedTask;
-                    }
-                };
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    RequireExpirationTime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-        builder.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy(Policies.OwnerPolicy, policy => policy.Requirements.Add(new OwnerPolicyRequirement()));
-        });
+            builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "postgresdb", null,
+                options => { options.UseSnakeCaseNamingConvention(); });
 
-        builder.Services.AddScoped<IEventService, EventService>();
-        builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddEndpointsApiExplorer();
 
-        var app = builder.Build();
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            }).AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
 
-        app.MapDefaultEndpoints();
-        app.UseCors();
-        app.UseAuthentication();
-        app.UseAuthorization();
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policyBuilder =>
+                {
+                    policyBuilder.WithOrigins("http://localhost:3000")  // Your frontend URL
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            });
 
-        if (!app.Environment.IsEnvironment("UnitTest"))
-        {
-            app.MigrateDatabaseAsync().Wait();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority =
+                        "https://dev-vqwp0iq3eaderlnm.us.auth0.com/"; //TODO: Can move this to configuration item or env var later
+                    options.Audience = "http://localhost:5000"; //TODO: Can move this to configuration item or env var later
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                            return Task.CompletedTask;
+                        },
+                        OnTokenValidated = context =>
+                        {
+                            Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                            return Task.CompletedTask;
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            Console.WriteLine("OnMessageReceived: " + context.Token);
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            Console.WriteLine("OnChallenge: " + context.Error);
+                            return Task.CompletedTask;
+                        }
+                    };
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        RequireExpirationTime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(ConstantReminders.Contracts.Policy.Policies.OwnerPolicy, policy => policy.Requirements.Add(new OwnerPolicyRequirement()));
+            });
+
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+            var app = builder.Build();
+
+            app.MapDefaultEndpoints();
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            if (!app.Environment.IsEnvironment("UnitTest"))
+            {
+                app.MigrateDatabaseAsync().Wait();
+            }
+
+            app.MapAEventEndpoints();
+
+            app.Run();
         }
-
-        app.MapAEventEndpoints();
-
-        app.Run();
     }
 }
+
+
 
 
