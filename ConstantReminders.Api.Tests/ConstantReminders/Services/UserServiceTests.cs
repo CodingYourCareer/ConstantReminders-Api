@@ -5,12 +5,9 @@ using ConstantReminders.Contracts.Models;
 using ConstantReminders.Services;
 using NSubstitute;
 
-
 namespace ConstantReminders.Api.Tests.ConstantReminders.Services;
-
 public class UserServiceTests
 {
-
     [Fact]
     public async Task CreateUser_ShouldCreateAndReturnUserWithCreated201()
     {
@@ -50,9 +47,7 @@ public class UserServiceTests
 
         mockRepo.CreateAsync(Arg.Any<User>())
             .Returns(Task.FromResult(createdUser));
-
         var response = await service.CreateUser(dto, "testUser", "testAuth0Id");
-
         await mockRepo.Received(1).CreateAsync(Arg.Any<User>());
 
         Assert.Equal(firstName, response.FirstName);
@@ -62,9 +57,7 @@ public class UserServiceTests
         Assert.Equal(communicationMethod, response.DefaultCommunicationMethod);
     }
 
-
     [Fact]
-
     public async Task GetUsers_ShouldReturnListOfUsers()
     {
         var mockRepo = Substitute.For<IBaseRepository<User>>();
@@ -80,25 +73,20 @@ public class UserServiceTests
         };
 
         mockRepo.List().Returns(users);
-
         var response = await service.GetUsers();
-
         await mockRepo.Received(1).List();
 
         Assert.NotNull(response);
         Assert.Equal(2, response.Count);
         Assert.Equal("John", response[0].FirstName);
         Assert.Equal("Jane", response[1].FirstName);
-
     }
 
     [Fact]
     public async Task GetUserById_ShouldReturnUser()
     {
- 
         var mockRepo = Substitute.For<IBaseRepository<User>>();
         var service = new UserService(mockRepo);
-
         var userId = Guid.NewGuid();
 
         var user = new User 
@@ -115,9 +103,7 @@ public class UserServiceTests
 
    
         mockRepo.GetByIdAsync(userId).Returns(user);
-
         var response = await service.GetUserById(userId);
-
         await mockRepo.Received(1).GetByIdAsync(userId);
 
         Assert.NotNull(response);
@@ -130,7 +116,6 @@ public class UserServiceTests
     {
         var mockRepo = Substitute.For<IBaseRepository<User>>();
         var service = new UserService(mockRepo);
-
         var userId = Guid.NewGuid();
         var existingUser = new User
         {
@@ -157,7 +142,6 @@ public class UserServiceTests
 
         // Mock repository behavior: Return existing user when queried
         mockRepo.GetByIdAsync(userId).Returns(existingUser);
-
         User? capturedUpdatedUser = null;
 
         // Capture what is passed to UpdateAsync instead of assuming correctness
@@ -205,10 +189,8 @@ public class UserServiceTests
     [Fact]
     public async Task DeleteUser_ShouldDeleteAndReturnUser()
     {
-       
         var mockRepo = Substitute.For<IBaseRepository<User>>();
         var service = new UserService(mockRepo);
-
         var userId = Guid.NewGuid();
 
         var user = new User 
@@ -222,19 +204,12 @@ public class UserServiceTests
             UpdatedBy = "user"
         };
 
-      
         mockRepo.GetByIdAsync(userId).Returns(user);
-
         mockRepo.DeleteAsync(Arg.Any<User>()).Returns(Task.CompletedTask);
-
-       
         var response = await service.DeleteUser(userId);
-
         await mockRepo.Received(1).GetByIdAsync(userId);
-
         await mockRepo.Received(1).DeleteAsync(Arg.Any<User>());
 
-      
         Assert.NotNull(response);
         Assert.True(response);
     }

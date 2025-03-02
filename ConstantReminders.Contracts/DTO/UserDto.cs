@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ConstantReminders.Contracts.DTO;
-
 public class UserDto
 {
     public Guid Id { get; set; }
