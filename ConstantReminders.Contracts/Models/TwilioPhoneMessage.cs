@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstantReminders.Contracts.Models
+namespace ConstantReminders.Contracts.Models;
+
+public class TwilioPhoneMessage
 {
-    internal class TwilioPhoneMessage
-    {
-    }
+    string phoneNumber { get; set; }
+    string phoneMessage { get; set; }
 }
