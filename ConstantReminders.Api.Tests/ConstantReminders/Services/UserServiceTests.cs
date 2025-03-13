@@ -209,8 +209,6 @@ public class UserServiceTests
         var response = await service.DeleteUser(userId);
         await mockRepo.Received(1).GetByIdAsync(userId);
         await mockRepo.Received(1).DeleteAsync(Arg.Any<User>());
-
-        Assert.NotNull(response);
-        Assert.True(response);
+       Assert.True(response);
     }
 }

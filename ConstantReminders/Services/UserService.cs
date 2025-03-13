@@ -51,8 +51,6 @@ public class UserService(IBaseRepository<User> userRepo) : IUserService
         if (user == null) return false;
 
         await userRepo.DeleteAsync(user);
-        await userRepo.DeleteAsync(user);
-        var deletedUser = await userRepo.GetByIdAsync(id);
-        return deletedUser == null;
+        return true;
     }
 }
