@@ -8,6 +8,6 @@ namespace ConstantReminders.Contracts.Models;
 
 public class TwilioPhoneMessage
 {
-    string phoneNumber { get; set; }
-    string phoneMessage { get; set; }
+    public string PhoneNumber { get; set; }
+    public string PhoneMessage { get; set; }
 }
