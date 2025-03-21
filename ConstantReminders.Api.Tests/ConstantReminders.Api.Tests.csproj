@@ -41,8 +41,4 @@
     <ProjectReference Include="..\ConstantReminders.Api\ConstantReminder.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ConstantReminders\Services\" />
-  </ItemGroup>
-
 </Project>
