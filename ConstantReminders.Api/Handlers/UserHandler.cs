@@ -1,6 +1,7 @@
 ﻿using ConstantReminders.Contracts.DTO;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ApiVersion = Asp.Versioning.ApiVersion;
@@ -71,6 +72,7 @@ public static class UserHandler
     }
 
     // Create a new user
+    [Authorize]
     public static async Task<IResult> CreateUser(
         [FromServices] IUserService userService,
         [FromBody] CreateUpdateUserDto newUserDto,
@@ -89,6 +91,7 @@ public static class UserHandler
     }
 
     // Get list of users
+    [Authorize]
     public static async Task<IResult> GetUsers([FromServices] IUserService userService)
     {
         var result = await userService.GetUsers();
@@ -106,6 +109,7 @@ public static class UserHandler
     }
 
     // Update user
+    [Authorize]
     public static async Task<IResult> UpdateUser(
         [FromServices] IUserService userService,
         [FromBody] CreateUpdateUserDto updatedUserDto,
@@ -124,6 +128,7 @@ public static class UserHandler
     }
 
     // Delete user
+    [Authorize]
     public static async Task<IResult> DeleteUser(
         [FromServices] IUserService userService,
         Guid id
