@@ -1,11 +1,8 @@
+﻿using ConstantReminders.Contracts.Models;
 using System.ComponentModel.DataAnnotations;
-using ConstantReminders.Contracts.Attribute;
 
-
-namespace ConstantReminders.Contracts.Models;
-
-[PhoneOrEmailRequired]
-public class User : IEntity
+namespace ConstantReminders.Contracts.DTO;
+public class UserDto
 {
     public Guid Id { get; set; }
     public string? FirstName { get; set; }
@@ -15,8 +12,4 @@ public class User : IEntity
     public string? Email { get; set; }
     public DefaultCommunicationMethod DefaultCommunicationMethod { get; set; }
     public required string AuthOId { get; set; }
-    public DateTime CreatedDateTime { get; set; }
-    public DateTime UpdatedDateTime { get; set; }
-    public required string CreatedBy { get; set; }
-    public string UpdatedBy { get; set; }
 }
