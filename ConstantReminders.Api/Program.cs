@@ -4,6 +4,7 @@ using Asp.Versioning;
 using ConstantReminder.Api.Extensions;
 using ConstantReminder.Api.Handlers;
 using ConstantReminder.Api.Policies;
+using ConstantReminders.Contracts.Config;
 using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Interfaces.Data;
 using ConstantReminders.Data;
@@ -112,6 +113,7 @@ namespace ConstantReminder.Api
 
             builder.Services.AddScoped<IEventService, EventService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddOptions<TwilioConfig>().Bind(builder.Configuration.GetSection("TwilioSettings")).ValidateOnStart();
 
             var app = builder.Build();
 

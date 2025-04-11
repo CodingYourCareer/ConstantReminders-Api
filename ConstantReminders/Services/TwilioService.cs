@@ -1,12 +1,8 @@
-﻿using ConstantReminders.Contracts.Interfaces.Business;
+﻿using ConstantReminders.Contracts.Config;
+using ConstantReminders.Contracts.Interfaces.Business;
 using ConstantReminders.Contracts.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 
 
@@ -14,44 +10,32 @@ namespace ConstantReminders.Services;
 
 public class TwilioService : ITwilioService
 {
-    public Task<TwilioPhoneMessage> SendMessageAsync(string number, string message)
+    private TwilioConfig _twilioConfig;
+    public TwilioService( TwilioConfig twilioConfig)
     {
-        var sendMessage = new TwilioPhoneMessage
-        {
-            PhoneNumber = number,
-            PhoneMessage = message
-        };
+        _twilioConfig = twilioConfig;
+    }
 
+    public async Task<TwilioResponse> SendMessageAsync(TwilioPhoneMessage message)
+    {
+        //when sending message, if it fails an exception is thrown. Use try Catch
+        var orgAccountSid = _twilioConfig.AccountID;
+        var authToken = _twilioConfig.AuthToken;
+        var userAccountSid = message.Id.ToString();
+        var recieve = message.PhoneNumber;
+        var sender = message.CreatedBy;
+        TwilioClient.Init(orgAccountSid, authToken);
+
+        Twilio.Base.ResourceSet<Twilio.Rest.PreviewIam.Organizations.AccountResource> accountList = null;
+        accountList = Twilio.Rest.PreviewIam.Organizations.AccountResource.Read(pathOrganizationSid: orgAccountSid);
+        var account = Twilio.Rest.PreviewIam.Organizations.AccountResource.Fetch(pathOrganizationSid: orgAccountSid, pathAccountSid: userAccountSid);
+
+        var messageOptions = new CreateMessageOptions(new PhoneNumber(recieve));
+        messageOptions.Body = message.PhoneMessage;
+
+        var messageResource = MessageResource.Create(messageOptions);
         
 
-        return new Task<TwilioPhoneMessage>
-        {
-            
-        };
-        throw new NotImplementedException();
+        ;
     }
 }
-
-using System;
-using System.Collections.Generic;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
-
-//class Example
-//{
-//    static void Main(string[] args)
-//    {
-//        var accountSid = "AC8a8d5e3c965c36bba4fd1af99a5476d4";
-//        var authToken = "[AuthToken]";
-//        TwilioClient.Init(accountSid, authToken);
-
-//        var messageOptions = new CreateMessageOptions(
-//          new PhoneNumber("+18777804236"));
-//        messageOptions.Body = "Hello from Twilio";
-
-
-//        var message = MessageResource.Create(messageOptions);
-//        Console.WriteLine(message.Body);
-//    }
-//}
