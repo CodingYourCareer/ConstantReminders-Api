@@ -15,27 +15,33 @@ public class TwilioService : ITwilioService
     {
         _twilioConfig = twilioConfig;
     }
-
+     
     public async Task<TwilioResponse> SendMessageAsync(TwilioPhoneMessage message)
     {
-        //when sending message, if it fails an exception is thrown. Use try Catch
-        var orgAccountSid = _twilioConfig.AccountID;
+        var accountSid = _twilioConfig.AccountID;
         var authToken = _twilioConfig.AuthToken;
-        var userAccountSid = message.Id.ToString();
-        var recieve = message.PhoneNumber;
-        var sender = message.CreatedBy;
-        TwilioClient.Init(orgAccountSid, authToken);
-
-        Twilio.Base.ResourceSet<Twilio.Rest.PreviewIam.Organizations.AccountResource> accountList = null;
-        accountList = Twilio.Rest.PreviewIam.Organizations.AccountResource.Read(pathOrganizationSid: orgAccountSid);
-        var account = Twilio.Rest.PreviewIam.Organizations.AccountResource.Fetch(pathOrganizationSid: orgAccountSid, pathAccountSid: userAccountSid);
-
-        var messageOptions = new CreateMessageOptions(new PhoneNumber(recieve));
-        messageOptions.Body = message.PhoneMessage;
-
-        var messageResource = MessageResource.Create(messageOptions);
+        //when sending message, if it fails an exception is thrown. Use try Catch
         
 
-        ;
+        try
+        {
+            TwilioClient.Init(accountSid, authToken);
+            await Task.CompletedTask;
+            var messageOptions = new CreateMessageOptions("+18777804236");
+            messageOptions.From = new PhoneNumber("+18773092720");
+            messageOptions.Body = message.PhoneMessage;
+            var messageSend = MessageResource.Create(messageOptions);
+            Console.WriteLine(messageSend.Body);
+            var response = new TwilioResponse(true, "none");
+            return response;
+        }
+
+        catch (Exception ex)
+        {
+            return new TwilioResponse(false, ex.Message);
+        }
+        
+        
+        
     }
 }
